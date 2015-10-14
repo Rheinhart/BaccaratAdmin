@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'BaccaratAdmin.adminuser'
+    'BaccaratAdmin.adminuser',
+    'BaccaratAdmin.livecontroll',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'BaccaratAdmin.wsgi.application'
 DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'bjladmin',                      # Or path to database file if using sqlite3.
+        'NAME': 'bjl',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': '123456',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
