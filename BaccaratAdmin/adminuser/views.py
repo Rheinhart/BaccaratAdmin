@@ -2,11 +2,11 @@
 
 # Create your views here.
 from django.shortcuts import render_to_response,HttpResponseRedirect,HttpResponse
-from gameadmin.toolfunc import checklogin,checkSecurity
+from BaccaratAdmin.toolfunc import checklogin,checkSecurity
 import admin
 import datetime
 
-@checkSecurity
+#@checkSecurity
 def login(request):
     '''用户登录页面'''
     if request.method == "POST":
@@ -14,14 +14,14 @@ def login(request):
     else:
         return admin.login_no_user(request)
     
-@checkSecurity
+#@checkSecurity
 @checklogin
 def main(request):
     username = request.COOKIES.get("login_user")
     return render_to_response('main.html',{'usernaem':username,
                                            'nowdate':datetime.date.today()})
 
-@checkSecurity
+#@checkSecurity
 @checklogin
 def loginout(request):
     '''注销

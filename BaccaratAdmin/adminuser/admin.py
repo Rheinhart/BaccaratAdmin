@@ -1,10 +1,11 @@
 #coding:utf8
 '''
-Created on 2015-09-28
+Created on 2015-10-13
 
 @author: Thomas
 '''
-from BaccaratAdmin.adminuser.models import AdminUser
+
+from BaccaratAdmin.adminuser.models import TControllers
 from django.shortcuts import render_to_response,HttpResponseRedirect
 from BaccaratAdmin.errormsg import *
 
@@ -20,7 +21,7 @@ def login_check_user(request):
     username = request.POST['username']
     password = request.POST['password']
     try:
-        theuser = AdminUser.objects.get(name=username)
+        theuser = TControllers.objects.get(loginname=username)
     except Exception:
         theuser = None
     if not theuser:

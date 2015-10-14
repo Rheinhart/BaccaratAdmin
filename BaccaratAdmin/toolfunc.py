@@ -5,7 +5,7 @@ Created on 2012-12-29
 @author: lan (www.9miao.com)
 '''
 from django.shortcuts import HttpResponseRedirect,render_to_response
-#from gameadmin.serverinfo.models import WhiteList
+#from BaccaratAdmin.serverinfo.models import WhiteList
 import hashlib,socket
 
 def checklogin(func):
