@@ -17,9 +17,9 @@ class TControllers(models.Model):
 
     PASS_KEY = 'Asianark'
 
-    loginname = models.CharField(db_column='Loginname', verbose_name="用户名",unique=True, primary_key=True, max_length=16)  # Field name made lowercase.
-    password = models.CharField(max_length=32,verbose_name="密码")
-    permit = models.IntegerField(choices=PERMIT,verbose_name="操作权限",default=1)
+    loginname = models.CharField(db_column='Loginname', verbose_name='用户名',unique=True, primary_key=True, max_length=16)  # Field name made lowercase.
+    password = models.CharField(max_length=32,verbose_name='密码')
+    permit = models.IntegerField(choices=PERMIT,verbose_name='操作权限',default=1)
     flag = models.IntegerField(choices=FLAG,verbose_name='是否禁用',default=0)
 
     def serializable_password(self):
@@ -33,7 +33,7 @@ class TControllers(models.Model):
         '''检测密码
         '''
         sha = hashlib.md5()
-        sha.update(password+self.PASS_KEY+self.name)
+        sha.update(password+self.PASS_KEY+self.loginname)
         nowpassword = sha.hexdigest().upper()
         if nowpassword==self.password:
             return True

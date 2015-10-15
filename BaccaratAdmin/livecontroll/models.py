@@ -1,3 +1,4 @@
+#coding:utf8
 # Create your models here.
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
@@ -22,22 +23,22 @@ class DjangoMigrations(models.Model):
         db_table = 'django_migrations'
 
 
-class TAgents(models.Model):
-    agentcode = models.CharField(db_column='AgentCode', primary_key=True, max_length=16)  # Field name made lowercase.
-    agentname = models.CharField(db_column='AgentName', max_length=32)  # Field name made lowercase.
-    password = models.CharField(max_length=32)
-    flag = models.IntegerField()
-    trytype = models.IntegerField(db_column='tryType')  # Field name made lowercase.
-    create_time = models.DateField(db_column='Create_time')  # Field name made lowercase.
-    create_ip = models.CharField(db_column='Create_ip', max_length=16)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 't_agents'
+#class TAgents(models.Model):
+    # agentcode = models.CharField(db_column='AgentCode', primary_key=True, max_length=16)  # Field name made lowercase.
+    # agentname = models.CharField(db_column='AgentName', max_length=32)  # Field name made lowercase.
+    # password = models.CharField(max_length=32)
+    # flag = models.IntegerField()
+    # trytype = models.IntegerField(db_column='tryType')  # Field name made lowercase.
+    # create_time = models.DateField(db_column='Create_time')  # Field name made lowercase.
+    # create_ip = models.CharField(db_column='Create_ip', max_length=16)  # Field name made lowercase.
+    #
+    # class Meta:
+    #     managed = False
+    #     db_table = 't_agents'
 
 
 class TBulletin(models.Model):
-    bulletinid = models.CharField(db_column='BulletinID', primary_key=True, max_length=16)  # Field name made lowercase.
+    bulletinid = models.CharField(db_column='BulletinID', verbose_name='公告id',primary_key=True, max_length=16)  # Field name made lowercase.
     create_time = models.DateField(db_column='Create_time')  # Field name made lowercase.
     expired_time = models.DateField(db_column='Expired_time')  # Field name made lowercase.
     text = models.CharField(max_length=200)

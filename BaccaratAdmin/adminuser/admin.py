@@ -28,7 +28,7 @@ def login_check_user(request):
         return render_to_response('login.html',{'errormsg':USER_ERROR})
     if not theuser.check_password(password):
         return render_to_response('login.html',{'errormsg':PASSWORD_ERROR})
-    response = HttpResponseRedirect("/main")
+    response = HttpResponseRedirect("/login")
     response.set_cookie('login_user', username,max_age=600)
     return response
 
