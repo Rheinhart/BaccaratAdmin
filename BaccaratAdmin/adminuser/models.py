@@ -42,7 +42,7 @@ class TControllers(models.Model):
     def __unicode__(self):
         """
         """
-        return self.loginname
+        return "loginname=%s permit=%s flag=%s"%(self.loginname,self.permit,self.flag)
 
     class Meta:
 

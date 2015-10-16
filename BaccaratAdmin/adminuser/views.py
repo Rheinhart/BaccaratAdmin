@@ -18,10 +18,10 @@ def login(request):
 @checklogin
 def main(request):
     username = request.COOKIES.get("login_user")
-    return render_to_response('main.html',{'usernaem':username,
+    return render_to_response('main.html',{'username':username,
                                            'nowdate':datetime.date.today()})
 
-#@checkSecurity
+#@checkSecurit
 @checklogin
 def loginout(request):
     '''注销

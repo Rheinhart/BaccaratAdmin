@@ -9,8 +9,8 @@ from BaccaratAdmin.adminuser.models import TControllers
 from django.shortcuts import render_to_response,HttpResponseRedirect
 from BaccaratAdmin.errormsg import *
 
-
 def login_no_user(request):
+
     '''没有用户的登陆情况
     '''
     return render_to_response('login.html',{'errormsg':''})
@@ -28,7 +28,8 @@ def login_check_user(request):
         return render_to_response('login.html',{'errormsg':USER_ERROR})
     if not theuser.check_password(password):
         return render_to_response('login.html',{'errormsg':PASSWORD_ERROR})
-    response = HttpResponseRedirect("/login")
+    response = HttpResponseRedirect("/main")
     response.set_cookie('login_user', username,max_age=600)
     return response
+    return render_to_response('main.html')
 

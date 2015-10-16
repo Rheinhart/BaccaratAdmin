@@ -20,6 +20,6 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$','BaccaratAdmin.adminuser.views.login',name='login'),
-    url(r'^login','BaccaratAdmin.adminuser.views.main',name='main'),
+    url(r'^login','BaccaratAdmin.adminuser.views.login',name='login'),
     url(r'^main','BaccaratAdmin.adminuser.views.main',name='main'),
 ]

@@ -11,6 +11,7 @@
 # into your database.
 from __future__ import unicode_literals
 from django.db import models
+from django.contrib import admin
 
 
 class DjangoMigrations(models.Model):
@@ -38,15 +39,43 @@ class DjangoMigrations(models.Model):
 
 
 class TBulletin(models.Model):
-    bulletinid = models.CharField(db_column='BulletinID', verbose_name='公告id',primary_key=True, max_length=16)  # Field name made lowercase.
-    create_time = models.DateField(db_column='Create_time')  # Field name made lowercase.
-    expired_time = models.DateField(db_column='Expired_time')  # Field name made lowercase.
+    """
+        公告操作相关
+    """
+
+    bulletinid = models.AutoField(primary_key=True)
+    create_time = models.DateTimeField()
+    expired_time = models.DateTimeField()
     text = models.CharField(max_length=200)
     flag = models.IntegerField()
+
+    def addBulletin(self):
+
+        bulletinid = 125
+        create_time = '2015-10-15 23:59:59'
+        expired_time = '2015-10-16 12:22:13'
+        text = 'I am a large One'
+        flag = 1
+
+        myBulletin=TBulletin(bulletinid,create_time,expired_time,text,flag)
+        myBulletin.save()
+
+        return myBulletin
+
+    def delBulletin(self):
+        pass
+
+
+    def __unicode__(self):
+        '''
+        '''
+        return '%s' %self.bulletinid
 
     class Meta:
         managed = False
         db_table = 't_bulletin'
+
+admin.site.register(TBulletin)
 
 
 class TControllerlog(models.Model):
