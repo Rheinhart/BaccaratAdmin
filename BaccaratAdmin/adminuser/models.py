@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib import admin
 import hashlib
-
+from django.contrib.auth.models import User
 
 class TControllers(models.Model):
 
@@ -17,10 +17,18 @@ class TControllers(models.Model):
 
     PASS_KEY = 'Asianark'
 
+    user = models.OneToOneField(User) #自定义User model
+
     loginname = models.CharField(db_column='Loginname', verbose_name='用户名',unique=True, primary_key=True, max_length=16)  # Field name made lowercase.
     password = models.CharField(max_length=32,verbose_name='密码')
     permit = models.IntegerField(choices=PERMIT,verbose_name='操作权限',default=1)
     flag = models.IntegerField(choices=FLAG,verbose_name='是否禁用',default=0)
+
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            TControllers.objects.create(user=instance)
+
+    #post_save.connect(create_user_profile, sender=User)
 
     def serializable_password(self):
         '''加密密码

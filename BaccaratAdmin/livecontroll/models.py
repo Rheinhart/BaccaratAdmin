@@ -13,7 +13,10 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib import admin
 from django.core.validators import MinValueValidator, MaxValueValidator
-from  django.utils import timezone
+from django.utils import timezone
+from BaccaratAdmin.tools.protobuff import bulletin_pb2
+import datetime
+import requests
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -35,6 +38,20 @@ class TBulletin(models.Model):
     text = models.TextField(max_length=200,verbose_name= u'公告内容')
     flag = models.IntegerField(verbose_name= u'是否禁用',choices=FLAG,default=0)   #0:启用,1:禁用
 
+    def pushBulletin(self):
+        """push bulletin to the gameserver
+        """
+        mybulletin = bulletin_pb2.bulletinResponse()
+        mybulletin.beginTime = str(datetime.datetime.now())
+        mybulletin.endTime = str(datetime.datetime.now())
+        mybulletin.text = self.text
+
+
+        r = requests.post(r'http://localhost:2012',mybulletin.SerializeToString())
+
+
+        print self.text
+
     def __unicode__(self):
         '''
         '''
@@ -47,10 +64,16 @@ class TBulletin(models.Model):
         verbose_name_plural = u'公告信息'
 
 
+
 @admin.register(TBulletin)
 class TBulletinAdmin(admin.ModelAdmin):
 
     list_display = ('bulletinid','text','create_time','expired_time','flag')
+
+    def save_model(self, request, obj, form, change):
+
+        obj.save()
+        obj.pushBulletin()
 
 
 class TTable(models.Model):

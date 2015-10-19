@@ -121,6 +121,8 @@ STATICFILES_FINDERS = (
     #'djangobower.finders.BowerFinder',
 )
 
+AUTH_USER_MODULE = 'BaccaratAdmin.TControllers'
+
 BOWER_INSTALLED_APPS = (
     'jquery',
     'underscore',
