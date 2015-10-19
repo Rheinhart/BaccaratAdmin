@@ -47,10 +47,21 @@ class TControllers(models.Model):
     class Meta:
 
         verbose_name = "Controller"
+        verbose_name_plural = 'Controllers'
         managed = False
         db_table = 't_controllers'
 
+class TControllerlog(models.Model):
+    loginname = models.CharField(db_column='Loginname',verbose_name='操作log', primary_key=True, max_length=16)  # Field name made lowercase.
+    action = models.CharField(db_column='Action', verbose_name='操作', max_length=64)  # Field name made lowercase.
+    action_time = models.DateField(db_column='Action_time',verbose_name='操作开始时间')  # Field name made lowercase.
+    remark = models.CharField(max_length=100,verbose_name='记录')
 
+    class Meta:
+        managed = False
+        db_table = 't_controllerlog'
+
+@admin.register(TControllers)
 class ControllersAdmin(admin.ModelAdmin):
     list_display = ('loginname', 'permit','flag')
     
@@ -60,5 +71,3 @@ class ControllersAdmin(admin.ModelAdmin):
         """
         obj.serializable_password()
         obj.save()
-    
-admin.site.register(TControllers, ControllersAdmin)
