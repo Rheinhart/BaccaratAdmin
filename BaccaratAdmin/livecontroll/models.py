@@ -43,8 +43,8 @@ class TBulletin(models.Model):
     class Meta:
         managed = False
         db_table = 't_bulletin'
-        verbose_name =  u'公告信息'
-        verbose_name_plural =  u'公告信息'
+        verbose_name = u'公告信息'
+        verbose_name_plural = u'公告信息'
 
 
 @admin.register(TBulletin)
