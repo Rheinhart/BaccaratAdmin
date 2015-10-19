@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'djangobower',
+    #'djangobower',
     'BaccaratAdmin.adminuser',
     'BaccaratAdmin.livecontroll',
 )
@@ -118,7 +118,7 @@ STATIC_ROOT = ''
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'djangobower.finders.BowerFinder',
+    #'djangobower.finders.BowerFinder',
 )
 
 BOWER_INSTALLED_APPS = (
