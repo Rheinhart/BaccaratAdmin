@@ -22,6 +22,7 @@ import json
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -64,13 +65,9 @@ def pushBulletinToGameSer(sender,instance,**argvs):
         mybulletin.endTime = str(datetime.datetime.now())
         mybulletin.text = instance.text
 
-        path =os.path.join(os.path.abspath('.'),'BaccaratAdmin\config.json')
-        print path
-
         config = json.load(open(path))
         url = config['Server']['url']
         port = config['Server']['port']
-        print url
 
         return requests.post('%s:%s'%(url,port),mybulletin.SerializeToString())
 
