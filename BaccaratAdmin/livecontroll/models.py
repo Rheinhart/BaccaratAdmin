@@ -17,6 +17,11 @@ from django.utils import timezone
 from BaccaratAdmin.tools.protobuff import bulletin_pb2
 import datetime
 import requests
+import os
+import json
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -38,19 +43,6 @@ class TBulletin(models.Model):
     text = models.TextField(max_length=200,verbose_name= u'公告内容')
     flag = models.IntegerField(verbose_name= u'是否禁用',choices=FLAG,default=0)   #0:启用,1:禁用
 
-    def pushBulletin(self):
-        """push bulletin to the gameserver
-        """
-        mybulletin = bulletin_pb2.bulletinResponse()
-        mybulletin.beginTime = str(datetime.datetime.now())
-        mybulletin.endTime = str(datetime.datetime.now())
-        mybulletin.text = self.text
-
-
-        r = requests.post(r'http://localhost:2012',mybulletin.SerializeToString())
-
-
-        print self.text
 
     def __unicode__(self):
         '''
@@ -63,17 +55,26 @@ class TBulletin(models.Model):
         verbose_name = u'公告信息'
         verbose_name_plural = u'公告信息'
 
+@receiver(post_save, sender=TBulletin)
+def pushBulletinToGameSer(sender,instance,**argvs):
+        """push bulletin to the gameserver
+        """
+        mybulletin = bulletin_pb2.bulletinResponse()
+        mybulletin.beginTime = str(datetime.datetime.now())
+        mybulletin.endTime = str(datetime.datetime.now())
+        mybulletin.text = instance.text
+
+        config = json.load(open('config.json'))
+        url = config['Server']['url']
+        port = config['Server']['port']
+
+        return requests.post('%s:%s'%(url,port),mybulletin.SerializeToString())
 
 
 @admin.register(TBulletin)
 class TBulletinAdmin(admin.ModelAdmin):
 
     list_display = ('bulletinid','text','create_time','expired_time','flag')
-
-    def save_model(self, request, obj, form, change):
-
-        obj.save()
-        obj.pushBulletin()
 
 
 class TTable(models.Model):
