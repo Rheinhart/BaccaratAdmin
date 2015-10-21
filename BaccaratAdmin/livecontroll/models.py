@@ -61,8 +61,8 @@ def pushBulletinToGameSer(sender,instance,**argvs):
         """push bulletin to the gameserver after which saved into the database
         """
         mybulletin = bulletin_pb2.bulletinResponse()
-        mybulletin.beginTime = str(datetime.datetime.now())
-        mybulletin.endTime = str(datetime.datetime.now())
+        mybulletin.beginTime = str(instance.create_time)
+        mybulletin.endTime = str(instance.expired_time)
         mybulletin.text = instance.text
 
         config = json.load(open(path))
