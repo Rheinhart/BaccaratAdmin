@@ -15,10 +15,13 @@ def pushLoginMessageToGameSer(**argvs):
         """push message to the gameserver when login
            code: 0x00050002
         """
-        message = {'code':'0x00050002','message':'Manager login success!'}
+        login = login_pb2.loginResultResponse()
+        login.code = 0x00050002
+        login.token = '123456'
+        login.flag = 2
 
         config = json.load(open(path))
         url = config['Server']['url']
         port = config['Server']['port']
 
-        return requests.post('%s:%s'%(url,port),message)
+        return requests.post('%s:%s'%(url,port),login.SerializeToString())
