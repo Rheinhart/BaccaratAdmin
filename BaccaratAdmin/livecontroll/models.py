@@ -58,7 +58,7 @@ class TBulletin(models.Model):
 
 @receiver(post_save, sender=TBulletin)
 def pushBulletinToGameSer(sender,instance,**argvs):
-        """push bulletin to the gameserver
+        """push bulletin to the gameserver after which saved into the database
         """
         mybulletin = bulletin_pb2.bulletinResponse()
         mybulletin.beginTime = str(datetime.datetime.now())
@@ -76,6 +76,7 @@ def pushBulletinToGameSer(sender,instance,**argvs):
 class TBulletinAdmin(admin.ModelAdmin):
 
     list_display = ('bulletinid','text','create_time','expired_time','flag')
+    search_fields = ('bulletinid','flag')
 
 
 class TTable(models.Model):
@@ -105,6 +106,7 @@ class TTable(models.Model):
 class TTableAdmin(admin.ModelAdmin):
 
     list_display = ('tableid','videoid','gametype','limitid','seats','flag')
+
 
 class TTableLimitset(models.Model):
 
