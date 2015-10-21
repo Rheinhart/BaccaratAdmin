@@ -14,13 +14,14 @@ from django.db import models
 from django.contrib import admin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
-from BaccaratAdmin.tools.protobuff import bulletin_pb2
+from BaccaratAdmin.tools.protobuff import bulletin_pb2,tableLimit_pb2
 import datetime
 import requests
 import os
 import json
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth.signals import user_logged_in
 
 path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
 
@@ -57,7 +58,7 @@ class TBulletin(models.Model):
         verbose_name_plural = u'公告信息'
 
 @receiver(post_save, sender=TBulletin)
-def pushBulletinToGameSer(sender,instance,**argvs):
+def pushBulletinToGameSer(instance,**argvs):
         """push bulletin to the gameserver after which saved into the database
         """
         mybulletin = bulletin_pb2.bulletinResponse()
@@ -128,6 +129,23 @@ class TTableLimitset(models.Model):
         db_table = 't_table_limitset'
         verbose_name =  u'桌台限红表'
         verbose_name_plural =  u'桌台限红表'
+
+@receiver(post_save, sender=TTableLimitset)
+def pushTableLimitToGameSer(instance,**argvs):
+        """push TableLimit message to the gameserver after which saved into the database
+        """
+        mytableLimit = tableLimit_pb2.tableLimit()
+        mytableLimit.limitid = instance.limitid
+        mytableLimit.playtype = instance.playtype
+        mytableLimit.min = instance.min
+        mytableLimit.max = instance.max
+        mytableLimit.flag = instance.flag
+
+        config = json.load(open(path))
+        url = config['Server']['url']
+        port = config['Server']['port']
+
+        return requests.post('%s:%s'%(url,port),mytableLimit.SerializeToString())
 
 @admin.register(TTableLimitset)
 class TTableLimitsetAdmin(admin.ModelAdmin):
