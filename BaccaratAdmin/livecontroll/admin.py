@@ -11,8 +11,8 @@ from django.contrib.auth.signals import user_logged_in
 path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
 
 @receiver(user_logged_in)
-def pushBulletinToGameSer(**argvs):
-        """push bulletin to the gameserver when login
+def pushLoginMessageToGameSer(**argvs):
+        """push message to the gameserver when login
            code: 0x00050002
         """
         message = {'code':'0x00050002','message':'Manager login success!'}
