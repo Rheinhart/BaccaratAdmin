@@ -24,4 +24,5 @@ def pushLoginMessageToGameSer(**argvs):
         url = config['Server']['url']
         port = config['Server']['port']
 
-        return requests.post('%s:%s'%(url,port),login.SerializeToString())
+        return requests.get('%s:%s'%(url,port),'123456')
+

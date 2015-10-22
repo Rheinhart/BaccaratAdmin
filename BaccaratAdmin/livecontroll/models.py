@@ -45,6 +45,20 @@ class TBulletin(models.Model):
     text = models.TextField(max_length=200,verbose_name= u'公告内容')
     flag = models.IntegerField(verbose_name= u'是否禁用',choices=FLAG,default=0)   #0:启用,1:禁用
 
+    def pushBulletinToGameSer(self):
+        """push bulletin to the gameserver after which saved into the database
+        """
+        mybulletin = bulletin_pb2.bulletinResponse()
+        mybulletin.beginTime = str(self.create_time)
+        mybulletin.endTime = str(self.expired_time)
+        mybulletin.text = self.text
+
+        config = json.load(open(path))
+        url = config['Server']['url']
+        port = config['Server']['port']
+
+        return requests.post('%s:%s'%(url,port),mybulletin.SerializeToString())
+
 
     def __unicode__(self):
         '''
@@ -58,13 +72,14 @@ class TBulletin(models.Model):
         verbose_name_plural = u'公告信息'
 
 @receiver(post_save, sender=TBulletin)
-def pushBulletinToGameSer(instance,**argvs):
+def pushBulletinToGameSer(sender,instance,**argvs):
         """push bulletin to the gameserver after which saved into the database
         """
+        TBulletin = instance
         mybulletin = bulletin_pb2.bulletinResponse()
-        mybulletin.beginTime = str(instance.create_time)
-        mybulletin.endTime = str(instance.expired_time)
-        mybulletin.text = instance.text
+        mybulletin.beginTime = str(TBulletin.create_time)
+        mybulletin.endTime = str(TBulletin.expired_time)
+        mybulletin.text = TBulletin.text
 
         config = json.load(open(path))
         url = config['Server']['url']
@@ -78,6 +93,10 @@ class TBulletinAdmin(admin.ModelAdmin):
 
     list_display = ('bulletinid','text','create_time','expired_time','flag')
     search_fields = ('bulletinid','flag')
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        #obj.pushBulletinToGameSer()
 
 
 class TTable(models.Model):
