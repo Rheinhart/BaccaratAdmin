@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib import admin
 import hashlib
 from django.contrib.auth.models import User
+from time import strftime
 
 class TControllers(models.Model):
 
@@ -15,7 +16,7 @@ class TControllers(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
-    PASS_KEY = 'Asianark'
+    PASS_KEY = strftime("%Y%m%d%H%M%S")
 
     user = models.OneToOneField(User) #自定义User model
 
