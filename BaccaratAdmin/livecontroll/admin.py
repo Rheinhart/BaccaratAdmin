@@ -7,6 +7,7 @@ import os
 import json
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
+from django.core.cache import cache
 
 path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
 
@@ -24,5 +25,7 @@ def pushLoginMessageToGameSer(**argvs):
         url = config['Server']['url']
         port = config['Server']['port']
 
-        return requests.get('%s:%s'%(url,port),'123456')
+
+
+        return requests.get('http://127.0.0.1:2014/GET&123456')
 
