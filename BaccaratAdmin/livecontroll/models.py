@@ -14,13 +14,14 @@ from django.db import models
 from django.contrib import admin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
-from BaccaratAdmin.tools.protobuff import bulletin_pb2,tableLimit_pb2
+from BaccaratAdmin.tools.protobuff import bulletin_pb2,tableLimit_pb2,getVideos_pb2,addVideo_pb2
 import datetime
 import requests
 import os
 import json
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.cache import cache
 from django.contrib.auth.signals import user_logged_in
 
 path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
@@ -40,7 +41,7 @@ class TBulletin(models.Model):
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
     bulletinid = models.AutoField(verbose_name= u'公告id',max_length=11,primary_key=True)
-    create_time = models.DateTimeField(verbose_name= u'创建时间',default=timezone.now)
+    create_time = models.DateTimeField(verbose_name= u'创建时间',default=datetime.datetime.now)
     expired_time = models.DateTimeField(verbose_name= u'到期时间')
     text = models.TextField(max_length=200,verbose_name= u'公告内容')
     flag = models.IntegerField(verbose_name= u'是否禁用',choices=FLAG,default=0)   #0:启用,1:禁用
@@ -49,8 +50,8 @@ class TBulletin(models.Model):
         """push bulletin to the gameserver after which saved into the database
         """
         mybulletin = bulletin_pb2.bulletinResponse()
-        mybulletin.beginTime = str(self.create_time)
-        mybulletin.endTime = str(self.expired_time)
+        mybulletin.beginTime = self.create_time.strftime("%Y-%m-%d %H:%M:%S")
+        mybulletin.endTime = self.expired_time.strftime("%Y-%m-%d %H:%M:%S")
         mybulletin.text = self.text
 
         config = json.load(open(path))
@@ -75,18 +76,11 @@ class TBulletin(models.Model):
 def pushBulletinToGameSer(sender,instance,**argvs):
         """push bulletin to the gameserver after which saved into the database
         """
-        TBulletin = instance
-        mybulletin = bulletin_pb2.bulletinResponse()
-        mybulletin.beginTime = str(TBulletin.create_time)
-        mybulletin.endTime = str(TBulletin.expired_time)
-        mybulletin.text = TBulletin.text
-
+        command = 20037
         config = json.load(open(path))
         url = config['Server']['url']
         port = config['Server']['port']
-
-        return requests.post('%s:%s'%(url,port),mybulletin.SerializeToString())
-
+        return requests.get('%s:%s/bulletin?command=%s'%(url,port,command))
 
 @admin.register(TBulletin)
 class TBulletinAdmin(admin.ModelAdmin):
@@ -126,6 +120,7 @@ class TTable(models.Model):
 class TTableAdmin(admin.ModelAdmin):
 
     list_display = ('tableid','videoid','gametype','limitid','seats','flag')
+    search_fields = ('tableid','videoid','gametype','limitid')
 
 
 class TTableLimitset(models.Model):
@@ -197,6 +192,7 @@ class TPersonalLimitset(models.Model):
 class TPersonalLimitsetAdmin(admin.ModelAdmin):
 
     list_display = ('limitid','playtype','min','max','flag')
+    search_fields = ('limitid','playtype','min','max','flag')
 
 
 class TCustomers(models.Model):
@@ -211,7 +207,7 @@ class TCustomers(models.Model):
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
     credit = models.FloatField()
     limitid = models.IntegerField(db_column='limitID',verbose_name= u'个人盘口ID')  # Field name made lowercase.
-    create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=timezone.now)  # Field name made lowercase.
+    create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
     create_ip = models.GenericIPAddressField(db_column='Create_ip', max_length=16)  # Field name made lowercase.
     last_login_time = models.DateTimeField(db_column='Last_login_time',verbose_name= u'最后一次登录时间')  # Field name made lowercase.
     last_login_ip = models.GenericIPAddressField(db_column='Last_login_ip',verbose_name= u'最有一次登录IP', max_length=16)  # Field name made lowercase.
@@ -275,7 +271,7 @@ class TOrders(models.Model):
     win_amount = models.IntegerField(db_column='Win_amount')  # Field name made lowercase.
     before_credit = models.IntegerField(db_column='Before_credit')  # Field name made lowercase.
     after_credit = models.IntegerField(db_column='After_credit')  # Field name made lowercase.
-    create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=timezone.now)  # Field name made lowercase.
+    create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
     reckon_time = models.DateTimeField(db_column='Reckon_time')  # Field name made lowercase.
     ip = models.CharField(max_length=16)
 
@@ -296,7 +292,7 @@ class TRounds(models.Model):
     cards = models.CharField(max_length=24, blank=True, null=True)
     bankerpoint = models.IntegerField(blank=True, null=True,verbose_name= u'庄家')
     playerpoint = models.IntegerField(blank=True, null=True,verbose_name= u'闲家')
-    begintime = models.DateTimeField(verbose_name= u'开始时间',default=timezone.now)
+    begintime = models.DateTimeField(verbose_name= u'开始时间',default=datetime.datetime.now)
     closetime = models.DateTimeField(blank=True, null=True,verbose_name= u'结束时间')
     shoecode = models.CharField(max_length=16,verbose_name='靴号')
 
@@ -316,7 +312,7 @@ class TRecalcRounds(models.Model):
 
 
     actionid = models.CharField(primary_key=True, max_length=16)
-    create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=timezone.now)  # Field name made lowercase.
+    create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
     action = models.CharField(max_length=64)
     roundcode = models.CharField(max_length=16)
 
@@ -332,8 +328,25 @@ class TVideo(models.Model):
     videoid = models.CharField(db_column='VideoID', verbose_name= u'视频ID',primary_key=True, max_length=4)  # Field name made lowercase.
     gametype = models.CharField(db_column='GameType', verbose_name= u'游戏类型', max_length=16)  # Field name made lowercase.
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
-    bettime = models.DateTimeField(db_column='BetTime',verbose_name= u'视频开始时间',default=timezone.now)  # Field name made lowercase.
+    bettime = models.IntegerField(db_column='BetTime',verbose_name= u'下注倒计时')  # Field name made lowercase.
     url = models.URLField(db_column='URL', max_length=160)  # Field name made lowercase.
+    #tableinfo = models.ForeignKey(TTable)
+    #tablecount = models.IntegerField(db_column='tableCount',verbose_name= u'桌台统计')  # additional item saved in memcached!
+
+    def updateTvideoToMem(self):
+
+        myVideo = addVideo_pb2.addVideoRequest()
+        myVideo.videoId = self.videoid
+        myVideo.gameType = self.gametype
+        myVideo.betTime = self.bettime
+        myVideo.url = self.url
+
+        config = json.load(open(path))
+        url = config['Server']['url']
+        port = config['Server']['port']
+
+        return requests.post('%s:%s/video?command=20038'%(url,port),myVideo.SerializeToString())
+
 
     class Meta:
         managed = False
@@ -345,6 +358,12 @@ class TVideo(models.Model):
 class TVideoAdmin(admin.ModelAdmin):
 
     list_display = ('videoid','gametype','bettime','url','flag')
+    search_fields = ('videoid','gametype','bettime','url','flag')
+
+    def save_model(self, request, obj, form, change):
+        obj.addTvideoToMem()
+        pass
+
 
 
 #class TAgents(models.Model):
