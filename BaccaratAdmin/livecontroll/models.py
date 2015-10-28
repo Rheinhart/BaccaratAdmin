@@ -361,8 +361,7 @@ class TVideoAdmin(admin.ModelAdmin):
     search_fields = ('videoid','gametype','bettime','url','flag')
 
     def save_model(self, request, obj, form, change):
-        obj.addTvideoToMem()
-        pass
+        obj.updateTvideoToMem()
 
 
 
