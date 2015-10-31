@@ -1,3 +1,7 @@
+#coding:utf8
+"""
+@__author__ = 'Thomas'
+"""
 from BaccaratAdmin.tools.fireflymem.dbpool import dbpool
 from BaccaratAdmin.tools.fireflymem.memclient import mclient
 from BaccaratAdmin.tools.fireflymem.mmode import MAdmin

@@ -294,12 +294,11 @@ class TVideo(models.Model):
     bettime = models.IntegerField(db_column='BetTime',verbose_name= u'下注倒计时(s)')  # Field name made lowercase.
     url = models.URLField(db_column='URL', max_length=160)  # Field name made lowercase.
 
-    def change_Video(self):
+    def change_video(self):
         mdata = {'videoid':self.videoid,'url':self.url,'flag':self.flag,'bettime':self.bettime,'gametype':self.gametype}
         changeVideotoMem(mdata)
-    def add_Video(self):
-        mdata = {'videoid':self.videoid,'url':self.url,'flag':self.flag,'bettime':self.bettime,'gametype':self.gametype}
-        addVideotoMem(mdata)
+    def add_video(self):
+        updateVideoDbtoMem()
 
     def __unicode__(self):
         return '视频信息 %s' %self.videoid
@@ -346,11 +345,11 @@ class TVideoAdmin(admin.ModelAdmin):
         if change: #change
             #obj_old = self.model.objects.get(pk=obj.pk)
             print 'change: Mem'
-            obj.change_Video()
+            obj.change_video()
         else: #add
             print 'add:Db to Mem'
             obj.save()
-            updateVideoDbtoMem()
+            obj.add_video()
 
         #obj.save()
 
