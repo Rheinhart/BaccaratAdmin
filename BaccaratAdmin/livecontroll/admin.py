@@ -12,7 +12,7 @@ from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
 from django.db.models.signals import post_save
 from BaccaratAdmin.livecontroll.models import TBulletin,TTableLimitset,TPersonalLimitset,TCustomers,TRounds,TVideo,TTable
-from BaccaratAdmin.livecontroll.memopr import Memmode_Operation
+from BaccaratAdmin.livecontroll.models import memopr
 
 path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
 
@@ -121,9 +121,7 @@ class TVideoAdmin(admin.ModelAdmin):
         """
         The 'change list' admin view for this model.
         """
-        memor = Memmode_Operation()
-        memor.updateVideoMemToDb()
-        #get_readonly_fields=('videoid')
+        memopr.updateVideoMemToDb()
         return super(TVideoAdmin, self).changelist_view(request,extra_context=extra_context)
 
     def save_model(self, request, obj, form, change):

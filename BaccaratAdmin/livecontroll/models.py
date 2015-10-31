@@ -6,11 +6,10 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 import datetime
 import requests
-import os
 import json
 from BaccaratAdmin.livecontroll.memopr import Memmode_Operation
 
-path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
+memopr=Memmode_Operation() #链接memcache 和 database
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -223,14 +222,13 @@ class TVideo(models.Model):
     bettime = models.IntegerField(db_column='BetTime',verbose_name= u'下注倒计时(秒)')  # Field name made lowercase.
     url = models.URLField(db_column='URL', max_length=160)  # Field name made lowercase.
 
-    memopr=Memmode_Operation()
 
     def change_video(self):
         mdata = {'videoid':self.videoid,'url':self.url,'flag':self.flag,'bettime':self.bettime,'gametype':self.gametype}
-        self.memopr.changeVideotoMem(mdata)
+        memopr.changeVideotoMem(mdata)
 
     def add_video(self):
-        self.memopr.updateVideoDbtoMem()
+        memopr.updateVideoDbtoMem()
 
     def __unicode__(self):
         return '视频信息 %s' %self.videoid
@@ -248,7 +246,6 @@ class TTable(models.Model):
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
     tableid = models.CharField(db_column='TableID',verbose_name= u'桌台id', primary_key=True, max_length=4)  # Field name made lowercase.
-    #videoid = models.CharField(db_column='VideoID',verbose_name= u'视频id', max_length=4)  # Field name made lowercase.
     videoid = models.ForeignKey(TVideo,db_column= 'VideoID',verbose_name=u'视频id')
     gametype = models.CharField(db_column='GameType',verbose_name= u'玩法', max_length=16)  # Field name made lowercase.
     limitid = models.CharField(db_column='LimitID',verbose_name= u'限红id',max_length=4)  # Field name made lowercase.
