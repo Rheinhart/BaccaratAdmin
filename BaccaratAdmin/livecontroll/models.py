@@ -194,29 +194,33 @@ class TOrders(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
-    billno = models.CharField(max_length=16)
-    gametype = models.CharField(max_length=4)
+    billno = models.IntegerField()
+    gametype = models.CharField(max_length=16)
     loginname = models.CharField(max_length=32)
-    agentcode = models.CharField(db_column='AgentCode', max_length=16)  # Field name made lowercase.
+    agentcode = models.IntegerField(db_column='AgentCode')  # Field name made lowercase.
     roundcode = models.CharField(max_length=16)
-    videoid = models.IntegerField()
-    table = models.IntegerField()
-    seat = models.IntegerField()
-    dealer = models.CharField(max_length=16)
+    videoid = models.ForeignKey(TVideo,db_column='videoid',max_length=4,verbose_name= u'视频id')
+    tableid = models.ForeignKey(TTable,db_column='tableid',max_length=4,verbose_name= u'桌台id')
+    seat = models.IntegerField(verbose_name=u'桌台座位',validators=[MinValueValidator(0), MaxValueValidator(9999)])
+    #seat = models.ForeignKey(TTable,db_column='seat',max_length=4,verbose_name= u'桌位')
+    dealer = models.CharField(max_length=16,verbose_name='荷官')
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
-    playtype = models.IntegerField()
-    bet_amount = models.IntegerField()
+    playtype = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
+    bet_amount_cents = models.IntegerField()
+    win_amount_cents = models.IntegerField()
+    valid_bet_amount_cents = models.IntegerField()
     hashcode = models.CharField(max_length=32)
-    win_amount = models.IntegerField(db_column='Win_amount')  # Field name made lowercase.
-    before_credit = models.IntegerField(db_column='Before_credit')  # Field name made lowercase.
-    after_credit = models.IntegerField(db_column='After_credit')  # Field name made lowercase.
+    before_credit_cents = models.IntegerField(db_column='Before_credit_Cents')  # Field name made lowercase.
+    after_credit_cents = models.IntegerField(db_column='After_credit_Cents')  # Field name made lowercase.
     create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
-    reckon_time = models.DateTimeField(db_column='Reckon_time')  # Field name made lowercase.
-    ip = models.GenericIPAddressField(db_column='ip',verbose_name= u'IP', max_length=16)
+    reckon_time = models.DateTimeField(db_column='Reckon_time',blank=True,null=True)  # Field name made lowercase.
+    create_ip = models.GenericIPAddressField(db_column='ip',verbose_name= u'创建IP', max_length=16)
 
     class Meta:
         managed = False
         db_table = 't_orders'
+        verbose_name =  u'注单表'
+        verbose_name_plural =  u'注单表'
 
 
 class TRounds(models.Model):
@@ -229,7 +233,7 @@ class TRounds(models.Model):
     dealer = models.CharField(blank=True, null=True , max_length=16,verbose_name= u'荷官')
     flag = models.IntegerField(db_column= u'Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
     cards = models.CharField(max_length=24, blank=True, null=True)
-    cards = models.IntegerField(blank=True, null=True,validators=[MinValueValidator(0), MaxValueValidator(9999)])
+    cardnum = models.IntegerField(blank=True, null=True,validators=[MinValueValidator(0), MaxValueValidator(9999)])
     pair = models.IntegerField(blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(9999)])
     bankerpoint = models.IntegerField(blank=True, null=True,validators=[MinValueValidator(0), MaxValueValidator(9999)],verbose_name= u'庄家')
     playerpoint = models.IntegerField(blank=True, null=True,validators=[MinValueValidator(0), MaxValueValidator(9999)],verbose_name= u'闲家')
@@ -245,7 +249,6 @@ class TRounds(models.Model):
 
 
 class TRecalcRounds(models.Model):
-
 
     actionid = models.CharField(primary_key=True, max_length=16)
     create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
