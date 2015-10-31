@@ -34,7 +34,7 @@ class TBulletin(models.Model):
         return '公告 %s' %self.bulletinid
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_bulletin'
         verbose_name = u'公告信息'
         verbose_name_plural = u'公告信息'
@@ -61,7 +61,7 @@ class TVideo(models.Model):
         return self.videoid
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_video'
         verbose_name =  u'视频信息'
         verbose_name_plural =  u'视频信息'
@@ -73,7 +73,7 @@ class TTable(models.Model):
     FLAG = ((0,u'启用'),(1,u'禁用'),)
     GAMETYPE = (('BJL',u'百家乐'),('DDZ',u'斗地主'))
 
-    tableid = models.CharField(db_column='TableID',verbose_name= u'桌台id', primary_key=True, max_length=4)  # Field name made lowercase.
+    tableid = models.CharField(db_column='TableID',verbose_name= u'桌台id', primary_key=True, max_length=16)  # Field name made lowercase.
     videoid = models.ForeignKey(TVideo,db_column= 'VideoID',verbose_name=u'视频id')
     gametype = models.CharField(db_column='GameType',verbose_name= u'玩法',choices=GAMETYPE,default='BJL',max_length=16)  # Field name made lowercase.
     limitid = models.CharField(db_column='LimitID',verbose_name= u'限红id',max_length=4)  # Field name made lowercase.
@@ -93,7 +93,7 @@ class TTable(models.Model):
         return self.tableid
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_table'
         verbose_name = u'桌台信息'
         verbose_name_plural = u'桌台信息'
@@ -102,10 +102,10 @@ class TTableLimitset(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
-    limitid = models.CharField(db_column='LimitID',verbose_name= u'限红id', primary_key=True, max_length=4)  # Field name made lowercase.
+    limitid = models.CharField(db_column='LimitID',verbose_name= u'限红id',primary_key=True,max_length=4)  # Field name made lowercase.
     playtype = models.IntegerField(db_column='PlayType',verbose_name= u'玩法',validators=[MinValueValidator(0), MaxValueValidator(9999)])  # Field name made lowercase.
-    min_cents = models.FloatField(db_column='Min_Cents',verbose_name= u'最小下注额度')  # Field name made lowercase.
-    max_cents = models.FloatField(db_column='Max_Cents',verbose_name= u'最大下注额度')  # Field name made lowercase.
+    min_cents = models.IntegerField(db_column='Min_Cents',verbose_name= u'最小下注额度',default=0)  # Field name made lowercase.
+    max_cents = models.IntegerField(db_column='Max_Cents',verbose_name= u'最大下注额度',default=100)  # Field name made lowercase.
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)  # Field name made lowercase.
 
     def __unicode__(self):
@@ -114,7 +114,7 @@ class TTableLimitset(models.Model):
         return  u'桌台限红 %s' %self.tableid
 
     class Meta:
-        managed = False
+        #unique_together =(('limitid','playtype'),)
         db_table = 't_table_limitset'
         verbose_name =  u'桌台限红表'
         verbose_name_plural =  u'桌台限红表'
@@ -126,8 +126,8 @@ class TPersonalLimitset(models.Model):
 
     limitid = models.CharField(db_column='LimitID',verbose_name= u'限红id',primary_key=True,max_length=11)  # Field name made lowercase.
     playtype = models.IntegerField(db_column='PlayType',verbose_name= u'玩法',validators=[MinValueValidator(0), MaxValueValidator(9999)])  # Field name made lowercase.
-    min_cents = models.FloatField(db_column='Min_Cents', verbose_name= u'最小下注额度')  # Field name made lowercase.
-    max_cents = models.FloatField(db_column='Max_Cents', verbose_name= u'最大下注额度')  # Field name made lowercase.
+    min_cents = models.IntegerField(db_column='Min_Cents', verbose_name= u'最小下注额度',default=0)  # Field name made lowercase.
+    max_cents = models.IntegerField(db_column='Max_Cents', verbose_name= u'最大下注额度',default=100)  # Field name made lowercase.
     flag = models.IntegerField(db_column='Flag',verbose_name = u'是否禁用',choices=FLAG,default=0)  # Field name made lowercase.
 
     def __unicode__(self):
@@ -136,7 +136,7 @@ class TPersonalLimitset(models.Model):
         return  u'个人限红 %s' %self.limitid
 
     class Meta:
-        managed = False
+        #unique_together =(('limitid','playtype'),)
         db_table = 't_personal_limitset'
         verbose_name =  u'个人限红表'
         verbose_name_plural =  u'个人限红表'
@@ -146,30 +146,29 @@ class TOrders(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
-    billno = models.IntegerField()
+    billno = models.IntegerField(primary_key=True)
     gametype = models.CharField(max_length=16)
     loginname = models.CharField(max_length=32)
     agentcode = models.IntegerField(db_column='AgentCode')  # Field name made lowercase.
     roundcode = models.CharField(max_length=16)
-    videoid = models.ForeignKey(TVideo,db_column='videoid',max_length=4,verbose_name= u'视频id')
-    tableid = models.ForeignKey(TTable,db_column='tableid',max_length=4,verbose_name= u'桌台id')
+    videoid = models.ForeignKey(TVideo,db_column='videoid',max_length=4,verbose_name= u'视频id',default='')
+    tableid = models.ForeignKey(TTable,db_column='tableid',max_length=4,verbose_name= u'桌台id',default='')
     seat = models.IntegerField(verbose_name=u'桌台座位',validators=[MinValueValidator(0), MaxValueValidator(9999)])
     #seat = models.ForeignKey(TTable,db_column='seat',max_length=4,verbose_name= u'桌位')
     dealer = models.CharField(max_length=16,verbose_name='荷官')
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
     playtype = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999)])
-    bet_amount_cents = models.IntegerField()
-    win_amount_cents = models.IntegerField()
-    valid_bet_amount_cents = models.IntegerField()
+    bet_amount_cents = models.IntegerField(default=0)
+    win_amount_cents = models.IntegerField(default=0)
+    valid_bet_amount_cents = models.IntegerField(default=0)
     hashcode = models.CharField(max_length=32)
-    before_credit_cents = models.IntegerField(db_column='Before_credit_Cents')  # Field name made lowercase.
-    after_credit_cents = models.IntegerField(db_column='After_credit_Cents')  # Field name made lowercase.
+    before_credit_cents = models.IntegerField(db_column='Before_credit_Cents',default=0)  # Field name made lowercase.
+    after_credit_cents = models.IntegerField(db_column='After_credit_Cents',default=0)  # Field name made lowercase.
     create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
     reckon_time = models.DateTimeField(db_column='Reckon_time',blank=True,null=True)  # Field name made lowercase.
-    create_ip = models.GenericIPAddressField(db_column='ip',verbose_name= u'创建IP', max_length=16)
+    create_ip = models.GenericIPAddressField(db_column='ip',verbose_name= u'创建IP', max_length=16,default='127.0.0.1')
 
     class Meta:
-        managed = False
         db_table = 't_orders'
         verbose_name =  u'注单表'
         verbose_name_plural =  u'注单表'
@@ -194,7 +193,7 @@ class TRounds(models.Model):
     shoecode = models.CharField(max_length=16,verbose_name='靴号')
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_rounds'
         verbose_name =  u'游戏局信息表'
         verbose_name_plural =  u'游戏局信息表'
@@ -208,7 +207,7 @@ class TRecalcRounds(models.Model):
     roundcode = models.CharField(max_length=16)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_recalc_rounds'
         verbose_name =  u'重新结算局号记录表'
         verbose_name_plural =  u'重新结算局号记录表'
