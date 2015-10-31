@@ -250,7 +250,7 @@ class TRounds(models.Model):
 
 class TRecalcRounds(models.Model):
 
-    actionid = models.CharField(primary_key=True, max_length=16)
+    actionid = models.IntegerField(primary_key=True)
     create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
     action = models.CharField(max_length=64)
     roundcode = models.CharField(max_length=16)
@@ -258,6 +258,8 @@ class TRecalcRounds(models.Model):
     class Meta:
         managed = False
         db_table = 't_recalc_rounds'
+        verbose_name =  u'重新结算局号记录表'
+        verbose_name_plural =  u'重新结算局号记录表'
 
 
 
