@@ -34,7 +34,7 @@ class TBulletin(models.Model):
         return '公告 %s' %self.bulletinid
 
     class Meta:
-        #managed = False
+        managed = False
         db_table = 't_bulletin'
         verbose_name = u'公告信息'
         verbose_name_plural = u'公告信息'
@@ -61,7 +61,7 @@ class TVideo(models.Model):
         return self.videoid
 
     class Meta:
-        #managed = False
+        managed = False
         db_table = 't_video'
         verbose_name =  u'视频信息'
         verbose_name_plural =  u'视频信息'
@@ -93,7 +93,7 @@ class TTable(models.Model):
         return self.tableid
 
     class Meta:
-        #managed = False
+        managed = False
         db_table = 't_table'
         verbose_name = u'桌台信息'
         verbose_name_plural = u'桌台信息'
@@ -114,6 +114,7 @@ class TTableLimitset(models.Model):
         return  u'桌台限红 %s' %self.tableid
 
     class Meta:
+        managed = False
         #unique_together =(('limitid','playtype'),)
         db_table = 't_table_limitset'
         verbose_name =  u'桌台限红表'
@@ -136,6 +137,8 @@ class TPersonalLimitset(models.Model):
         return  u'个人限红 %s' %self.limitid
 
     class Meta:
+
+        managed = False
         #unique_together =(('limitid','playtype'),)
         db_table = 't_personal_limitset'
         verbose_name =  u'个人限红表'
@@ -169,6 +172,8 @@ class TOrders(models.Model):
     create_ip = models.GenericIPAddressField(db_column='ip',verbose_name= u'创建IP', max_length=16,default='127.0.0.1')
 
     class Meta:
+
+        managed = False
         db_table = 't_orders'
         verbose_name =  u'注单表'
         verbose_name_plural =  u'注单表'
@@ -193,7 +198,7 @@ class TRounds(models.Model):
     shoecode = models.CharField(max_length=16,verbose_name='靴号')
 
     class Meta:
-        #managed = False
+        managed = False
         db_table = 't_rounds'
         verbose_name =  u'游戏局信息表'
         verbose_name_plural =  u'游戏局信息表'
@@ -207,7 +212,7 @@ class TRecalcRounds(models.Model):
     roundcode = models.CharField(max_length=16)
 
     class Meta:
-        #managed = False
+        managed = False
         db_table = 't_recalc_rounds'
         verbose_name =  u'重新结算局号记录表'
         verbose_name_plural =  u'重新结算局号记录表'
