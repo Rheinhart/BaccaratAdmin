@@ -8,6 +8,7 @@ from BaccaratAdmin.tools.fireflymem.mmode import MAdmin
 from BaccaratAdmin.tools.fireflymem.madminanager import MAdminManager
 from BaccaratAdmin.settings import CACHES,DATABASES
 
+
 class Memmode_Operation:
     """Video, Table的缓存操作, 借助firefly memecache的相关api
     """
@@ -90,3 +91,5 @@ class Memmode_Operation:
         obj = self.tb_table_admin.getAllPkByFk(0)
         for id in obj:
             print self.tb_table_admin.getObjData(id)
+
+memopr=Memmode_Operation() #链接memcache和database

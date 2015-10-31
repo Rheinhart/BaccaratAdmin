@@ -4,9 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 import datetime
-from BaccaratAdmin.livecontroll.memopr import Memmode_Operation
-
-memopr=Memmode_Operation() #链接memcache和database
+from BaccaratAdmin.livecontroll.memopr import memopr
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
