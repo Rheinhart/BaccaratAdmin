@@ -7,6 +7,7 @@ from BaccaratAdmin.tools.protobuff import login_pb2,tableLimit_pb2,bulletin_pb2
 import requests
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
+from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models.signals import post_save
 from BaccaratAdmin.livecontroll.models import TBulletin,TTableLimitset,TPersonalLimitset,TRounds,TVideo,TTable
 from BaccaratAdmin.settings import GAME_SERVER
@@ -20,12 +21,20 @@ def pushLoginMessageToGameSer(**kwargs):
         """push message to the gameserver when login
            code: 0x00050002
         """
-        login = login_pb2.loginResultResponse()
-        login.code = 0x00050002
-        login.token = '123456'
-        login.flag = 2
+        #login = login_pb2.loginResultResponse()
+        #login.code = 0x00050002
+        #login.token = '123456'
+        #login.flag = 2
+        try:
+            requests.get('http//%s:%s/clogin'%(url,port))
 
-        return requests.get('http//%s:%s/GET&123456'%(url,port))
+        except Exception:
+            print "Can not send message to Game Server"
+            return False
+
+        finally:
+            response = HttpResponseRedirect("/admin")
+            return response
 
 @admin.register(TBulletin)
 class TBulletinAdmin(admin.ModelAdmin):
@@ -47,8 +56,12 @@ def pushBulletinToGameSer(sender,instance,**argvs):
         #mybulletin.beginTime = instance.create_time.strftime("%Y-%m-%d %H:%M:%S")
         #mybulletin.endTime = instance.expired_time.strftime("%Y-%m-%d %H:%M:%S")
         #mybulletin.text = instance.text
-
-        return requests.get('http://%s:%s/bulletin?command=%s'%(url,port,command))
+        try:
+            requests.get('http://%s:%s/bulletin?command=%s'%(url,port,command))
+        except Exception:
+            response = HttpResponseRedirect("/admin")
+            return response
+        return True
 
 @admin.register(TTableLimitset)
 class TTableLimitsetAdmin(admin.ModelAdmin):
@@ -164,4 +177,9 @@ class TTableAdmin(admin.ModelAdmin):
 #@receiver(user_logged_in)
 def getVideoInfoFromGameSer(**kwargs):
     command = 50002
-    return requests.get('%s:%s/video?command=%s'%(url,port,command))
+    try:
+        requests.get('%s:%s/video?command=%s'%(url,port,command))
+    except Exception:
+        response = HttpResponseRedirect("/admin")
+        return response
+    return True
