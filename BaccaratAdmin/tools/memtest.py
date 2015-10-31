@@ -29,15 +29,11 @@ if __name__ == '__main__':
     tb_video_admin = MAdmin('t_video', 'videoid', fk="flag")
     tb_video_admin.insert()
     MAdminManager().registe(tb_video_admin)
-
-    print "***"*20
     obj = tb_video_admin.getAllPkByFk(0)
-    print obj
     for id in obj:
         print tb_video_admin.getObjData(id)
-        mmode = tb_video_admin.getObj(id)
-        mmode.update('flag',1)
-        mmode.checkSync()
-        #MAdminManager().checkAdmins()
+    obj = tb_video_admin.getAllPkByFk(1)
+    for id in obj:
+        print tb_video_admin.getObjData(id)
 
 

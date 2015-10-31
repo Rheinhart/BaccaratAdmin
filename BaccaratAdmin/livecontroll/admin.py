@@ -4,7 +4,7 @@
 """
 
 from django.contrib import admin
-from BaccaratAdmin.tools.protobuff import login_pb2,tableLimit_pb2
+from BaccaratAdmin.tools.protobuff import login_pb2,tableLimit_pb2,bulletin_pb2
 import requests
 import os
 import json
@@ -50,13 +50,18 @@ def pushBulletinToGameSer(sender,instance,**argvs):
         config = json.load(open(path))
         url = config['Server']['url']
         port = config['Server']['port']
+
+        #mybulletin = bulletin_pb2.bulletinResponse()
+        #mybulletin.beginTime = instance.create_time.strftime("%Y-%m-%d %H:%M:%S")
+        #mybulletin.endTime = instance.expired_time.strftime("%Y-%m-%d %H:%M:%S")
+        #mybulletin.text = instance.text
+
         return requests.get('%s:%s/bulletin?command=%s'%(url,port,command))
 
 @admin.register(TTableLimitset)
 class TTableLimitsetAdmin(admin.ModelAdmin):
 
     list_display = ('limitid','playtype','min_cents','max_cents','flag')
-
 
 @receiver(post_save, sender=TTableLimitset)
 def pushTableLimitToGameSer(instance,**argvs):
@@ -74,6 +79,7 @@ def pushTableLimitToGameSer(instance,**argvs):
         port = config['Server']['port']
 
         return requests.post('%s:%s'%(url,port),mytableLimit.SerializeToString())
+
 @admin.register(TPersonalLimitset)
 class TPersonalLimitsetAdmin(admin.ModelAdmin):
 
@@ -98,7 +104,6 @@ class TVideoAdmin(admin.ModelAdmin):
     ordering = ('videoid',)
     readonly_fields = ('videoid',)
 
-
     def get_actions(self, request):
         """只允许特定管理者有删除视频权限"""
         actions = super(TVideoAdmin, self).get_actions(request)
@@ -107,9 +112,9 @@ class TVideoAdmin(admin.ModelAdmin):
                 del actions['delete_selected']
         return actions
 
-    #def mem_refresh(self, request, queryset):
-    #    updateVideoMemToDb()
-    #mem_refresh.short_description = u'更新所有的视频信息表'
+        #def mem_refresh(self, request, queryset):
+        #updateVideoMemToDb()
+        #mem_refresh.short_description = u'更新所有的视频信息表'
 
     def get_readonly_fields(self,request,obj=None):
         if obj:
@@ -118,22 +123,59 @@ class TVideoAdmin(admin.ModelAdmin):
             return []
 
     def changelist_view(self, request, extra_context=None):
-        """
+        """列表页面
         The 'change list' admin view for this model.
         """
-        memopr.updateVideoMemToDb()
+        memopr.syncVideoMemToDb()
         return super(TVideoAdmin, self).changelist_view(request,extra_context=extra_context)
 
     def save_model(self, request, obj, form, change):
         if change: #change
             #obj_old = self.model.objects.get(pk=obj.pk)
-            print 'change: Mem'
+            print 'change:In memcached'
             obj.change_video()
         else: #add
-            print 'add:Db to Mem'
+            print 'add:Database to memcached'
             obj.save()
             obj.add_video()
 
+@admin.register(TTable)
+class TTableAdmin(admin.ModelAdmin):
+
+    ordering = ('tableid',)
+    readonly_fields = ('tableid',)
+
+    def get_actions(self, request):
+        """只允许特定管理者有删除桌台权限"""
+        actions = super(TTableAdmin, self).get_actions(request)
+        if not request.user.is_superuser or request.user.username.upper() != 'ADMIN':
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+        return actions
+
+    def get_readonly_fields(self,request,obj=None):
+        if obj:
+            return ['tableid']
+        else:
+            return []
+
+    def changelist_view(self, request, extra_context=None):
+        """列表页面
+        The 'change list' admin view for this model.
+        """
+        memopr.syncVideoMemToDb()
+        memopr.syncTableMemToDb()
+        return super(TTableAdmin, self).changelist_view(request,extra_context=extra_context)
+
+    def save_model(self, request, obj, form, change):
+        if change: #change,在修改页面
+            #obj_old = self.model.objects.get(pk=obj.pk)
+            print 'change: Mem'
+            obj.change_table()
+        else: #add,在添加页面
+            print 'add:Db to Mem'
+            obj.save()
+            obj.add_table()
 
 #@receiver(user_logged_in)
 def getVideoInfoFromGameSer(**kwargs):
