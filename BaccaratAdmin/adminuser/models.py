@@ -4,10 +4,11 @@ from django.contrib import admin
 import hashlib
 from django.contrib.auth.models import User
 from time import strftime
+import datetime
 
 class TControllers(models.Model):
 
-    """后台管理员信息
+    """自定义后台管理员信息
        权限 permit 1 后台管理员
        权限 permit 2 现场管理员
     """
@@ -55,20 +56,23 @@ class TControllers(models.Model):
 
     class Meta:
 
-        verbose_name = "Controller"
-        verbose_name_plural = 'Controllers'
+        verbose_name = u'管理员表'
+        verbose_name_plural = u'管理员表'
         managed = False
         db_table = 't_controllers'
 
 class TControllerlog(models.Model):
     loginname = models.CharField(db_column='Loginname',verbose_name='操作log', primary_key=True, max_length=16)  # Field name made lowercase.
     action = models.CharField(db_column='Action', verbose_name='操作', max_length=64)  # Field name made lowercase.
-    action_time = models.DateField(db_column='Action_time',verbose_name='操作开始时间')  # Field name made lowercase.
+    action_time = models.DateTimeField(db_column='Action_time',verbose_name='操作开始时间',default=datetime.datetime.now) # Field name made lowercase.
     remark = models.CharField(max_length=100,verbose_name='记录')
 
     class Meta:
         managed = False
         db_table = 't_controllerlog'
+        verbose_name= u"控制器操作记录表"
+        verbose_name_plural = u'控制器操作记录表'
+
 
 @admin.register(TControllers)
 class ControllersAdmin(admin.ModelAdmin):

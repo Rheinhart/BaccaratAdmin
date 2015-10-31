@@ -11,7 +11,7 @@ import json
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
 from django.db.models.signals import post_save
-from BaccaratAdmin.livecontroll.models import TBulletin,TTableLimitset,TPersonalLimitset,TCustomers,TRounds,TVideo,TTable
+from BaccaratAdmin.livecontroll.models import TBulletin,TTableLimitset,TPersonalLimitset,TRounds,TVideo,TTable
 from BaccaratAdmin.livecontroll.models import memopr
 
 path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
@@ -87,9 +87,6 @@ class TPersonalLimitsetAdmin(admin.ModelAdmin):
     search_fields = ('limitid','playtype','min_cents','max_cents','flag')
 
 
-@admin.register(TCustomers)
-class TCustomersAdmin(admin.ModelAdmin):
-    list_display = ('loginname','nickname','credit_cents','limitid','create_time','create_ip','last_login_time','last_login_ip','pwd_expired_time','flag')
 
 @admin.register(TRounds)
 class TRoundAdmin(admin.ModelAdmin):

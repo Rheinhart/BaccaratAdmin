@@ -1,13 +1,12 @@
 #coding:utf8
-# Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
-# into your database.
+# Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label] into your database.
 from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 import datetime
 from BaccaratAdmin.livecontroll.memopr import Memmode_Operation
 
-memopr=Memmode_Operation() #链接memcache 和 database
+memopr=Memmode_Operation() #链接memcache和database
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -141,53 +140,6 @@ class TPersonalLimitset(models.Model):
         db_table = 't_personal_limitset'
         verbose_name =  u'个人限红表'
         verbose_name_plural =  u'个人限红表'
-
-
-class TCustomers(models.Model):
-
-    FLAG = ((0,u'启用'),(1,u'禁用'),)
-
-    loginname = models.CharField(db_column='Loginname',verbose_name= u'登录名', max_length=32,primary_key=True)  # Field name made lowercase.
-    agentcode = models.IntegerField(db_column='AgentCode',verbose_name= u'代理CODE',validators=[MinValueValidator(0), MaxValueValidator(9999)])  # Field name made lowercase.
-    password = models.CharField(max_length=32,verbose_name= u'密码')
-    nickname = models.CharField(max_length=32,verbose_name= u'昵称')
-    flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
-    credit_cents = models.FloatField(db_column='Credit_cents')
-    limitid = models.CharField(db_column='limitID',verbose_name= u'个人盘口ID',max_length=4)  # Field name made lowercase.
-    create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
-    create_ip = models.GenericIPAddressField(db_column='Create_ip', max_length=16)  # Field name made lowercase.
-    last_login_time = models.DateTimeField(db_column='Last_login_time',verbose_name= u'最后一次登录时间')  # Field name made lowercase.
-    last_login_ip = models.GenericIPAddressField(db_column='Last_login_ip',verbose_name= u'最有一次登录IP', max_length=16)  # Field name made lowercase.
-    pwd_expired_time = models.DateTimeField(db_column='Pwd_expired_time',verbose_name= u'密码失效时间')  # Field name made lowercase.
-
-
-    def __unicode__(self):
-        '''
-        '''
-        return  u'用户 %s' %self.nickname
-
-    class Meta:
-        managed = False
-        db_table = 't_customers'
-        verbose_name =  u'用户信息表'
-        verbose_name_plural =  u'用户信息表'
-
-
-class TCustomerTrans(models.Model):
-
-    transid = models.CharField(primary_key=True, max_length=16)
-    actoin_time = models.DateField(db_column='Actoin_time')  # Field name made lowercase.
-    loginname = models.CharField(max_length=16)
-    agentcode = models.CharField(db_column='AgentCode', max_length=16)  # Field name made lowercase.
-    action = models.CharField(max_length=32)
-    trans_amount = models.IntegerField(db_column='Trans_amount')  # Field name made lowercase.
-    before_credit = models.IntegerField(db_column='Before_credit')  # Field name made lowercase.
-    after_credit = models.IntegerField(db_column='After_credit')  # Field name made lowercase.
-    remark = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 't_customer_trans'
 
 
 class TOrders(models.Model):

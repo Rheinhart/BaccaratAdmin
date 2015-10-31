@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'BaccaratAdmin.adminuser',
+    'BaccaratAdmin.userinfo',
     'BaccaratAdmin.livecontroll',
     'BaccaratAdmin.serverinfo',
 )
