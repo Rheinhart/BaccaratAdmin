@@ -74,10 +74,9 @@ class TControllerlog(models.Model):
         verbose_name_plural = u'控制器操作记录表'
 
 
-@admin.register(TControllers)
+#@admin.register(TControllers)
 class ControllersAdmin(admin.ModelAdmin):
-    list_display = ('loginname', 'permit','flag')
-    
+
     def save_model(self, request, obj, form, change):
         """
         Given a model instance save it to the database.
