@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'BaccaratAdmin.adminuser',
     'BaccaratAdmin.livecontroll',
+    'BaccaratAdmin.serverinfo',
 )
 
 MIDDLEWARE_CLASSES = (

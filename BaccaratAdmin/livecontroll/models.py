@@ -1,30 +1,16 @@
 #coding:utf8
-# Create your models here.
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
-#
 # Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
 # into your database.
 from __future__ import unicode_literals
 from django.db import models
-from django.contrib import admin
-from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
-from BaccaratAdmin.tools.protobuff import bulletin_pb2,tableLimit_pb2
 import datetime
 import requests
 import os
 import json
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from BaccaratAdmin.tools.fireflymem.memopr import *
+from BaccaratAdmin.livecontroll.memopr import Memmode_Operation
 
 path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
-
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -71,26 +57,6 @@ class TBulletin(models.Model):
         verbose_name = u'公告信息'
         verbose_name_plural = u'公告信息'
 
-@receiver(post_save, sender=TBulletin)
-def pushBulletinToGameSer(sender,instance,**argvs):
-        """push bulletin to the gameserver after which saved into the database
-        """
-        command = 20037
-        config = json.load(open(path))
-        url = config['Server']['url']
-        port = config['Server']['port']
-        return requests.get('%s:%s/bulletin?command=%s'%(url,port,command))
-
-@admin.register(TBulletin)
-class TBulletinAdmin(admin.ModelAdmin):
-
-    list_display = ('bulletinid','text','create_time','expired_time','flag')
-    search_fields = ('bulletinid','flag')
-
-    def save_model(self, request, obj, form, change):
-        obj.save()
-        #obj.pushBulletinToGameSer()
-
 
 class TTableLimitset(models.Model):
 
@@ -113,28 +79,6 @@ class TTableLimitset(models.Model):
         verbose_name =  u'桌台限红表'
         verbose_name_plural =  u'桌台限红表'
 
-@receiver(post_save, sender=TTableLimitset)
-def pushTableLimitToGameSer(instance,**argvs):
-        """push TableLimit message to the gameserver after which saved into the database
-        """
-        mytableLimit = tableLimit_pb2.tableLimit()
-        mytableLimit.limitid = instance.limitid
-        mytableLimit.playtype = instance.playtype
-        mytableLimit.min = instance.min
-        mytableLimit.max = instance.max
-        mytableLimit.flag = instance.flag
-
-        config = json.load(open(path))
-        url = config['Server']['url']
-        port = config['Server']['port']
-
-        return requests.post('%s:%s'%(url,port),mytableLimit.SerializeToString())
-
-@admin.register(TTableLimitset)
-class TTableLimitsetAdmin(admin.ModelAdmin):
-
-    list_display = ('limitid','playtype','min_cents','max_cents','flag')
-
 
 class TPersonalLimitset(models.Model):
 
@@ -156,12 +100,6 @@ class TPersonalLimitset(models.Model):
         db_table = 't_personal_limitset'
         verbose_name =  u'个人限红表'
         verbose_name_plural =  u'个人限红表'
-
-@admin.register(TPersonalLimitset)
-class TPersonalLimitsetAdmin(admin.ModelAdmin):
-
-    list_display = ('limitid','playtype','min_cents','max_cents','flag')
-    search_fields = ('limitid','playtype','min_cents','max_cents','flag')
 
 
 class TCustomers(models.Model):
@@ -192,11 +130,6 @@ class TCustomers(models.Model):
         db_table = 't_customers'
         verbose_name =  u'用户信息表'
         verbose_name_plural =  u'用户信息表'
-
-
-@admin.register(TCustomers)
-class TCustomersAdmin(admin.ModelAdmin):
-    list_display = ('loginname','nickname','credit_cents','limitid','create_time','create_ip','last_login_time','last_login_ip','pwd_expired_time','flag')
 
 
 class TCustomerTrans(models.Model):
@@ -238,7 +171,7 @@ class TOrders(models.Model):
     after_credit = models.IntegerField(db_column='After_credit')  # Field name made lowercase.
     create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
     reckon_time = models.DateTimeField(db_column='Reckon_time')  # Field name made lowercase.
-    ip = models.CharField(max_length=16)
+    ip = models.GenericIPAddressField(db_column='ip',verbose_name= u'IP', max_length=16)
 
     class Meta:
         managed = False
@@ -268,11 +201,6 @@ class TRounds(models.Model):
         verbose_name_plural =  u'游戏局表'
 
 
-@admin.register(TRounds)
-class TRoundAdmin(admin.ModelAdmin):
-
-    list_display = ('roundcode','gametype','videoid','dealer','cards','begintime','closetime','shoecode')
-
 class TRecalcRounds(models.Model):
 
 
@@ -288,17 +216,21 @@ class TRecalcRounds(models.Model):
 class TVideo(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
+    GAMETYPE = (('BJL',u'百家乐'),('DDZ',u'斗地主'))
     videoid = models.CharField(db_column='VideoID', verbose_name= u'视频ID',primary_key=True, max_length=4)  # Field name made lowercase.
-    gametype = models.CharField(db_column='GameType', verbose_name= u'游戏类型', max_length=16)  # Field name made lowercase.
+    gametype = models.CharField(db_column='GameType', verbose_name= u'游戏类型', max_length=16,choices=GAMETYPE,default='BJL')  # Field name made lowercase.
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
-    bettime = models.IntegerField(db_column='BetTime',verbose_name= u'下注倒计时(s)')  # Field name made lowercase.
+    bettime = models.IntegerField(db_column='BetTime',verbose_name= u'下注倒计时(秒)')  # Field name made lowercase.
     url = models.URLField(db_column='URL', max_length=160)  # Field name made lowercase.
+
+    memopr=Memmode_Operation()
 
     def change_video(self):
         mdata = {'videoid':self.videoid,'url':self.url,'flag':self.flag,'bettime':self.bettime,'gametype':self.gametype}
-        changeVideotoMem(mdata)
+        self.memopr.changeVideotoMem(mdata)
+
     def add_video(self):
-        updateVideoDbtoMem()
+        self.memopr.updateVideoDbtoMem()
 
     def __unicode__(self):
         return '视频信息 %s' %self.videoid
@@ -308,50 +240,6 @@ class TVideo(models.Model):
         db_table = 't_video'
         verbose_name =  u'视频信息表'
         verbose_name_plural =  u'视频信息表'
-
-
-@admin.register(TVideo)
-class TVideoAdmin(admin.ModelAdmin):
-
-    list_display = ('videoid','gametype','bettime','url','flag')
-    search_fields = ('videoid','gametype','bettime','url','flag')
-    #readonly_fields = ('videoid',)
-
-
-    def get_actions(self, request):
-        """只允许特定管理者有删除视频权限"""
-        actions = super(TVideoAdmin, self).get_actions(request)
-        if not request.user.is_superuser or request.user.username.upper() != 'ADMIN':
-            if 'delete_selected' in actions:
-                del actions['delete_selected']
-        return actions
-
-    #def mem_refresh(self, request, queryset):
-    #    updateVideoMemToDb()
-    #mem_refresh.short_description = u'更新所有的视频信息表'
-
-    def get_readonly_fields(self,request,obj=None):
-        return self.readonly_fields
-
-    def changelist_view(self, request, extra_context=None):
-        """
-        The 'change list' admin view for this model.
-        """
-        updateVideoMemToDb()
-        get_readonly_fields=('videoid')
-        return super(TVideoAdmin, self).changelist_view(request,extra_context=extra_context)
-
-    def save_model(self, request, obj, form, change):
-        if change: #change
-            #obj_old = self.model.objects.get(pk=obj.pk)
-            print 'change: Mem'
-            obj.change_video()
-        else: #add
-            print 'add:Db to Mem'
-            obj.save()
-            obj.add_video()
-
-        #obj.save()
 
 
 class TTable(models.Model):
@@ -378,27 +266,6 @@ class TTable(models.Model):
         verbose_name = u'桌台信息'
         verbose_name_plural = u'桌台信息'
 
-@admin.register(TTable)
-class TTableAdmin(admin.ModelAdmin):
-
-    list_display = ('tableid','videoid','gametype','limitid','seats','flag','get_video_url')
-    search_fields = ('tableid','videoid','gametype','limitid')
-
-    def get_video_url(self,obj):
-        return obj.videoid.url
-    get_video_url.short_description = u'视频URL'
 
 
 
-#class TAgents(models.Model):
-    # agentcode = models.CharField(db_column='AgentCode', primary_key=True, max_length=16)  # Field name made lowercase.
-    # agentname = models.CharField(db_column='AgentName', max_length=32)  # Field name made lowercase.
-    # password = models.CharField(max_length=32)
-    # flag = models.IntegerField()
-    # trytype = models.IntegerField(db_column='tryType')  # Field name made lowercase.
-    # create_time = models.DateField(db_column='Create_time')  # Field name made lowercase.
-    # create_ip = models.CharField(db_column='Create_ip', max_length=16)  # Field name made lowercase.
-    #
-    # class Meta:
-    #     managed = False
-    #     db_table = 't_agents'
