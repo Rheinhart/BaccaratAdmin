@@ -2,64 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="60a7ecbf-5a95-4809-9387-ce2b80745466" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/fonts/glyphicons-halflings-regular.eot" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/fonts/glyphicons-halflings-regular.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/fonts/glyphicons-halflings-regular.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/img/logo-140x60.png1" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/img/logo-140x60.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/404.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/500.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templatetags/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/actions.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/auth/user/add_form.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/app_index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/admin/css/base.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/base.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/js/base.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/base_site.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/css/bootstrap.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/js/bootstrap.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templatetags/bootstrap_admin_template_tags.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/change_form.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/change_list.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/change_list_results.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/auth/user/change_password.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/admin/css/changelists.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/config.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/admin/css/dashboard.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/js/dashboard.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/date_hierarchy.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/delete_confirmation.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/delete_selected_confirmation.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/includes/field.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/includes/fieldset.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/filter.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/admin/css/forms.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/bootstrap_admin/fonts/glyphicons-halflings-regular.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/invalid_setup.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/registration/logged_out.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/admin/css/login.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/login.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/object_history.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/pagination.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/registration/password_change_done.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/registration/password_change_form.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/registration/password_reset_complete.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/registration/password_reset_confirm.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/registration/password_reset_done.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/registration/password_reset_email.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/registration/password_reset_form.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/popup_response.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/prepopulated_fields_js.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/related_widget_wrapper.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/search_form.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/bootstrap_admin/sidebar_menu.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/edit_inline/stacked.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/submit_line.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/templates/admin/edit_inline/tabular.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaccaratAdmin/livecontroll/models.py" afterPath="$PROJECT_DIR$/BaccaratAdmin/livecontroll/models.py" />
+      <change type="DELETED" beforePath="C:\Users\taoju\PycharmProjects\HK Project\BaccaratAdmin\BaccaratAdmin\config.json" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BaccaratAdmin/settings.py" afterPath="$PROJECT_DIR$/BaccaratAdmin/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -82,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BaccaratAdmin/livecontroll/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.625323">
-              <caret line="214" column="7" selection-start-line="214" selection-start-column="7" selection-end-line="214" selection-end-column="7" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="85" column="14" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
               <folding>
                 <element signature="e#118#157#0" expanded="true" />
               </folding>
@@ -98,7 +41,7 @@
         <entry file="file://$PROJECT_DIR$/BaccaratAdmin/livecontroll/memopr.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="60" column="8" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
+              <caret line="94" column="47" selection-start-line="94" selection-start-column="47" selection-end-line="94" selection-end-column="47" />
               <folding>
                 <element signature="e#44#100#0" expanded="true" />
               </folding>
@@ -118,34 +61,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="errormsg.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BaccaratAdmin/errormsg.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="error_view.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BaccaratAdmin/error_view.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="admin.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BaccaratAdmin/livecontroll/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="63" column="21" selection-start-line="63" selection-start-column="21" selection-end-line="63" selection-end-column="21" />
-              <folding>
-                <element signature="e#45#77#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.57019436">
+              <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -154,7 +75,7 @@
         <entry file="file://$PROJECT_DIR$/BaccaratAdmin/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+              <caret line="142" column="20" selection-start-line="142" selection-start-column="20" selection-end-line="142" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -242,12 +163,12 @@
         <option value="$PROJECT_DIR$/BaccaratAdmin/serverinfo/admin.py" />
         <option value="$PROJECT_DIR$/testa/models.py" />
         <option value="$PROJECT_DIR$/BaccaratAdmin/serverinfo/models.py" />
-        <option value="$PROJECT_DIR$/BaccaratAdmin/livecontroll/memopr.py" />
         <option value="$PROJECT_DIR$/BaccaratAdmin/tools/memtest.py" />
         <option value="$PROJECT_DIR$/BaccaratAdmin/userinfo/admin.py" />
         <option value="$PROJECT_DIR$/BaccaratAdmin/userinfo/models.py" />
         <option value="$PROJECT_DIR$/BaccaratAdmin/adminuser/models.py" />
         <option value="$PROJECT_DIR$/BaccaratAdmin/livecontroll/admin.py" />
+        <option value="$PROJECT_DIR$/BaccaratAdmin/livecontroll/memopr.py" />
         <option value="$PROJECT_DIR$/BaccaratAdmin/livecontroll/models.py" />
         <option value="$PROJECT_DIR$/BaccaratAdmin/settings.py" />
       </list>
@@ -886,7 +807,19 @@
       <option name="project" value="LOCAL" />
       <updated>1446313298340</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="change boostrap_admin dir">
+      <created>1446314248905</created>
+      <option name="number" value="00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1446314248905</updated>
+    </task>
+    <task id="LOCAL-00032" summary="refactor setting.GAME_SERVER, mmopr">
+      <created>1446315388599</created>
+      <option name="number" value="00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1446315388599</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TodoView">
@@ -908,7 +841,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29765886" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.632312" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4181818" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3118881" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32887402" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20753512" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998884" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -958,7 +891,9 @@
     <MESSAGE value="models: t_recalcrounds" />
     <MESSAGE value="models: tcustomers" />
     <MESSAGE value="makemigrations&#10;migrate" />
-    <option name="LAST_COMMIT_MESSAGE" value="makemigrations&#10;migrate" />
+    <MESSAGE value="change boostrap_admin dir" />
+    <MESSAGE value="refactor setting.GAME_SERVER, mmopr" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor setting.GAME_SERVER, mmopr" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1111,6 +1046,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.7300885">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1125,6 +1061,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.9734513">
           <caret line="20" column="10" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1132,6 +1069,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="5.3539824">
           <caret line="195" column="31" selection-start-line="195" selection-start-column="31" selection-end-line="195" selection-end-column="31" />
+          <folding>
+            <element signature="e#71#100#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1246,7 +1186,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
           <folding>
-            <element signature="e#45#77#0" expanded="true" />
+            <element signature="e#45#77#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1256,7 +1196,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="40" column="51" selection-start-line="40" selection-start-column="51" selection-end-line="40" selection-end-column="51" />
           <folding>
-            <element signature="e#44#72#0" expanded="true" />
+            <element signature="e#44#72#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1266,12 +1206,12 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
           <folding>
-            <element signature="e#61#116#0" expanded="true" />
+            <element signature="e#61#116#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BaccaratAdmin/errormsg.py">
+    <entry file="file://$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/admin/css/base.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1280,6 +1220,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BaccaratAdmin/error_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BaccaratAdmin/errormsg.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1300,46 +1248,36 @@
     <entry file="file://$PROJECT_DIR$/BaccaratAdmin/livecontroll/memopr.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="60" column="8" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
+          <caret line="94" column="47" selection-start-line="94" selection-start-column="47" selection-end-line="94" selection-end-column="47" />
           <folding>
             <element signature="e#44#100#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BaccaratAdmin/livecontroll/admin.py">
+    <entry file="file://$PROJECT_DIR$/BaccaratAdmin/livecontroll/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="63" column="21" selection-start-line="63" selection-start-column="21" selection-end-line="63" selection-end-column="21" />
+          <caret line="85" column="14" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
           <folding>
-            <element signature="e#45#77#0" expanded="true" />
+            <element signature="e#118#157#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BaccaratAdmin/bootstrap_admin/static/admin/css/base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BaccaratAdmin/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+          <caret line="142" column="20" selection-start-line="142" selection-start-column="20" selection-end-line="142" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BaccaratAdmin/livecontroll/models.py">
+    <entry file="file://$PROJECT_DIR$/BaccaratAdmin/livecontroll/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.625323">
-          <caret line="214" column="7" selection-start-line="214" selection-start-column="7" selection-end-line="214" selection-end-column="7" />
-          <folding>
-            <element signature="e#118#157#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.57019436">
+          <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>

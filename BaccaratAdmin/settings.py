@@ -140,7 +140,7 @@ CACHES = {
 GAME_SERVER = {
     'dafault':{
         'URL':'127.0.0.1',
-        'PORT':2014,
+        'PORT':'2014',
         'NAME':'bjl_Game_Ser'
     }
 }
