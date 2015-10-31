@@ -12,19 +12,19 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib import admin
+from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.utils import timezone
-from BaccaratAdmin.tools.protobuff import bulletin_pb2,tableLimit_pb2,getVideos_pb2,addVideo_pb2
+from BaccaratAdmin.tools.protobuff import bulletin_pb2,tableLimit_pb2
 import datetime
 import requests
 import os
 import json
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.cache import cache
-from django.contrib.auth.signals import user_logged_in
+from BaccaratAdmin.tools.fireflymem.memopr import *
 
 path =os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir)),'config.json')
+
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -60,7 +60,6 @@ class TBulletin(models.Model):
 
         return requests.post('%s:%s'%(url,port),mybulletin.SerializeToString())
 
-
     def __unicode__(self):
         '''
         '''
@@ -93,44 +92,14 @@ class TBulletinAdmin(admin.ModelAdmin):
         #obj.pushBulletinToGameSer()
 
 
-class TTable(models.Model):
-    """桌台操作相关"""
-
-    FLAG = ((0,u'启用'),(1,u'禁用'),)
-
-    tableid = models.CharField(db_column='TableID',verbose_name= u'桌台id', primary_key=True, max_length=4)  # Field name made lowercase.
-    videoid = models.CharField(db_column='VideoID',verbose_name= u'视频id', max_length=4)  # Field name made lowercase.
-    gametype = models.CharField(db_column='GameType',verbose_name= u'玩法', max_length=16)  # Field name made lowercase.
-    limitid = models.IntegerField(db_column='LimitID',validators=[MinValueValidator(0), MaxValueValidator(9999)],verbose_name= u'限红id')  # Field name made lowercase.
-    seats = models.IntegerField(db_column='Seats',validators=[MinValueValidator(0), MaxValueValidator(9999)],verbose_name= u'座位数')
-    flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)  # Field name made lowercase.
-
-    def __unicode__(self):
-        '''
-        '''
-        return  u'桌台 %s' %self.tableid
-
-    class Meta:
-        managed = False
-        db_table = 't_table'
-        verbose_name =  u'桌台信息'
-        verbose_name_plural =  u'桌台信息'
-
-@admin.register(TTable)
-class TTableAdmin(admin.ModelAdmin):
-
-    list_display = ('tableid','videoid','gametype','limitid','seats','flag')
-    search_fields = ('tableid','videoid','gametype','limitid')
-
-
 class TTableLimitset(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
-    limitid = models.CharField(db_column='LimitID',verbose_name= u'盘口id', primary_key=True, max_length=11)  # Field name made lowercase.
+    limitid = models.CharField(db_column='LimitID',verbose_name= u'盘口id', primary_key=True, max_length=4)  # Field name made lowercase.
     playtype = models.IntegerField(db_column='PlayType',verbose_name= u'玩法',validators=[MinValueValidator(0), MaxValueValidator(9999)])  # Field name made lowercase.
-    min = models.FloatField(db_column='Min',verbose_name= u'最小下注额度')  # Field name made lowercase.
-    max = models.FloatField(db_column='Max',verbose_name= u'最大下注额度')  # Field name made lowercase.
+    min_cents = models.FloatField(db_column='Min_Cents',verbose_name= u'最小下注额度')  # Field name made lowercase.
+    max_cents = models.FloatField(db_column='Max_Cents',verbose_name= u'最大下注额度')  # Field name made lowercase.
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)  # Field name made lowercase.
 
     def __unicode__(self):
@@ -164,17 +133,17 @@ def pushTableLimitToGameSer(instance,**argvs):
 @admin.register(TTableLimitset)
 class TTableLimitsetAdmin(admin.ModelAdmin):
 
-    list_display = ('limitid','playtype','min','max','flag')
+    list_display = ('limitid','playtype','min_cents','max_cents','flag')
 
 
 class TPersonalLimitset(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
-    limitid = models.IntegerField(db_column='LimitID',verbose_name= u'盘口id',primary_key=True)  # Field name made lowercase.
+    limitid = models.CharField(db_column='LimitID',verbose_name= u'盘口id',primary_key=True,max_length=11)  # Field name made lowercase.
     playtype = models.IntegerField(db_column='PlayType',verbose_name= u'玩法',validators=[MinValueValidator(0), MaxValueValidator(9999)])  # Field name made lowercase.
-    min = models.FloatField(db_column='Min', verbose_name= u'最小下注额度')  # Field name made lowercase.
-    max = models.FloatField(db_column='Max', verbose_name= u'最大下注额度')  # Field name made lowercase.
+    min_cents = models.FloatField(db_column='Min_Cents', verbose_name= u'最小下注额度')  # Field name made lowercase.
+    max_cents = models.FloatField(db_column='Max_Cents', verbose_name= u'最大下注额度')  # Field name made lowercase.
     flag = models.IntegerField(db_column='Flag',verbose_name = u'是否禁用',choices=FLAG,default=0)  # Field name made lowercase.
 
     def __unicode__(self):
@@ -191,22 +160,21 @@ class TPersonalLimitset(models.Model):
 @admin.register(TPersonalLimitset)
 class TPersonalLimitsetAdmin(admin.ModelAdmin):
 
-    list_display = ('limitid','playtype','min','max','flag')
-    search_fields = ('limitid','playtype','min','max','flag')
+    list_display = ('limitid','playtype','min_cents','max_cents','flag')
+    search_fields = ('limitid','playtype','min_cents','max_cents','flag')
 
 
 class TCustomers(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
 
-    customerid = models.IntegerField(primary_key=True,verbose_name= u'用户ID')
-    loginname = models.CharField(db_column='Loginname',verbose_name= u'登录名', max_length=32)  # Field name made lowercase.
-    agentcode = models.CharField(db_column='AgentCode',verbose_name= u'代理CODE',max_length=16)  # Field name made lowercase.
+    loginname = models.CharField(db_column='Loginname',verbose_name= u'登录名', max_length=32,primary_key=True)  # Field name made lowercase.
+    agentcode = models.IntegerField(db_column='AgentCode',verbose_name= u'代理CODE',validators=[MinValueValidator(0), MaxValueValidator(9999)])  # Field name made lowercase.
     password = models.CharField(max_length=32,verbose_name= u'密码')
     nickname = models.CharField(max_length=32,verbose_name= u'昵称')
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
-    credit = models.FloatField()
-    limitid = models.IntegerField(db_column='limitID',verbose_name= u'个人盘口ID')  # Field name made lowercase.
+    credit_cents = models.FloatField(db_column='Credit_cents')
+    limitid = models.CharField(db_column='limitID',verbose_name= u'个人盘口ID',max_length=4)  # Field name made lowercase.
     create_time = models.DateTimeField(db_column='Create_time',verbose_name= u'创建时间',default=datetime.datetime.now)  # Field name made lowercase.
     create_ip = models.GenericIPAddressField(db_column='Create_ip', max_length=16)  # Field name made lowercase.
     last_login_time = models.DateTimeField(db_column='Last_login_time',verbose_name= u'最后一次登录时间')  # Field name made lowercase.
@@ -228,11 +196,10 @@ class TCustomers(models.Model):
 
 @admin.register(TCustomers)
 class TCustomersAdmin(admin.ModelAdmin):
-    list_display = ('customerid','nickname','credit','limitid','create_time','create_ip','last_login_time','last_login_ip','pwd_expired_time','flag')
+    list_display = ('loginname','nickname','credit_cents','limitid','create_time','create_ip','last_login_time','last_login_ip','pwd_expired_time','flag')
 
 
 class TCustomerTrans(models.Model):
-
 
     transid = models.CharField(primary_key=True, max_length=16)
     actoin_time = models.DateField(db_column='Actoin_time')  # Field name made lowercase.
@@ -244,11 +211,9 @@ class TCustomerTrans(models.Model):
     after_credit = models.IntegerField(db_column='After_credit')  # Field name made lowercase.
     remark = models.CharField(max_length=100)
 
-
     class Meta:
         managed = False
         db_table = 't_customer_trans'
-
 
 
 class TOrders(models.Model):
@@ -320,33 +285,24 @@ class TRecalcRounds(models.Model):
         managed = False
         db_table = 't_recalc_rounds'
 
-
 class TVideo(models.Model):
 
     FLAG = ((0,u'启用'),(1,u'禁用'),)
-
     videoid = models.CharField(db_column='VideoID', verbose_name= u'视频ID',primary_key=True, max_length=4)  # Field name made lowercase.
     gametype = models.CharField(db_column='GameType', verbose_name= u'游戏类型', max_length=16)  # Field name made lowercase.
     flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)
-    bettime = models.IntegerField(db_column='BetTime',verbose_name= u'下注倒计时')  # Field name made lowercase.
+    bettime = models.IntegerField(db_column='BetTime',verbose_name= u'下注倒计时(s)')  # Field name made lowercase.
     url = models.URLField(db_column='URL', max_length=160)  # Field name made lowercase.
-    #tableinfo = models.ForeignKey(TTable)
-    #tablecount = models.IntegerField(db_column='tableCount',verbose_name= u'桌台统计')  # additional item saved in memcached!
 
-    def updateTvideoToMem(self):
+    def change_Video(self):
+        mdata = {'videoid':self.videoid,'url':self.url,'flag':self.flag,'bettime':self.bettime,'gametype':self.gametype}
+        changeVideotoMem(mdata)
+    def add_Video(self):
+        mdata = {'videoid':self.videoid,'url':self.url,'flag':self.flag,'bettime':self.bettime,'gametype':self.gametype}
+        addVideotoMem(mdata)
 
-        myVideo = addVideo_pb2.addVideoRequest()
-        myVideo.videoId = self.videoid
-        myVideo.gameType = self.gametype
-        myVideo.betTime = self.bettime
-        myVideo.url = self.url
-
-        config = json.load(open(path))
-        url = config['Server']['url']
-        port = config['Server']['port']
-
-        return requests.post('%s:%s/video?command=20038'%(url,port),myVideo.SerializeToString())
-
+    def __unicode__(self):
+        return '视频信息 %s' %self.videoid
 
     class Meta:
         managed = False
@@ -354,14 +310,84 @@ class TVideo(models.Model):
         verbose_name =  u'视频信息表'
         verbose_name_plural =  u'视频信息表'
 
+
 @admin.register(TVideo)
 class TVideoAdmin(admin.ModelAdmin):
 
     list_display = ('videoid','gametype','bettime','url','flag')
     search_fields = ('videoid','gametype','bettime','url','flag')
+    #readonly_fields = ('videoid',)
+
+
+    def get_actions(self, request):
+        """只允许特定管理者有删除视频权限"""
+        actions = super(TVideoAdmin, self).get_actions(request)
+        if not request.user.is_superuser or request.user.username.upper() != 'ADMIN':
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+        return actions
+
+    #def mem_refresh(self, request, queryset):
+    #    updateVideoMemToDb()
+    #mem_refresh.short_description = u'更新所有的视频信息表'
+
+    def get_readonly_fields(self,request,obj=None):
+        return self.readonly_fields
+
+    def changelist_view(self, request, extra_context=None):
+        """
+        The 'change list' admin view for this model.
+        """
+        updateVideoMemToDb()
+        get_readonly_fields=('videoid')
+        return super(TVideoAdmin, self).changelist_view(request,extra_context=extra_context)
 
     def save_model(self, request, obj, form, change):
-        obj.updateTvideoToMem()
+        if change: #change
+            #obj_old = self.model.objects.get(pk=obj.pk)
+            print 'change: Mem'
+            obj.change_Video()
+        else: #add
+            print 'add:Db to Mem'
+            obj.save()
+            updateVideoDbtoMem()
+
+        #obj.save()
+
+
+class TTable(models.Model):
+    """桌台操作相关"""
+
+    FLAG = ((0,u'启用'),(1,u'禁用'),)
+
+    tableid = models.CharField(db_column='TableID',verbose_name= u'桌台id', primary_key=True, max_length=4)  # Field name made lowercase.
+    #videoid = models.CharField(db_column='VideoID',verbose_name= u'视频id', max_length=4)  # Field name made lowercase.
+    videoid = models.ForeignKey(TVideo,db_column= 'VideoID',verbose_name=u'视频id')
+    gametype = models.CharField(db_column='GameType',verbose_name= u'玩法', max_length=16)  # Field name made lowercase.
+    limitid = models.CharField(db_column='LimitID',verbose_name= u'限红id',max_length=4)  # Field name made lowercase.
+    seats = models.IntegerField(db_column='Seats',validators=[MinValueValidator(0), MaxValueValidator(9999)],verbose_name= u'座位数')
+    flag = models.IntegerField(db_column='Flag',verbose_name= u'是否禁用',choices=FLAG,default=0)  # Field name made lowercase.
+
+    def __unicode__(self):
+        '''
+        '''
+        return self.tableid
+
+    class Meta:
+        managed = False
+        db_table = 't_table'
+        verbose_name = u'桌台信息'
+        verbose_name_plural = u'桌台信息'
+
+@admin.register(TTable)
+class TTableAdmin(admin.ModelAdmin):
+
+    list_display = ('tableid','videoid','gametype','limitid','seats','flag','get_video_url')
+    search_fields = ('tableid','videoid','gametype','limitid')
+
+    def get_video_url(self,obj):
+        return obj.videoid.url
+    get_video_url.short_description = u'视频URL'
 
 
 

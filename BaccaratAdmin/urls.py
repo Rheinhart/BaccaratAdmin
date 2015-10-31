@@ -18,6 +18,7 @@ from django.contrib import admin
 #admin.autodiscover()
 
 urlpatterns = [
+    #url(r'^admin/livecontroll/tvideo/','BaccaratAdmin.livecontroll.views.MemToDatabase',name='MemToDatabase'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$','BaccaratAdmin.adminuser.views.login',name='login'),
     url(r'^login','BaccaratAdmin.adminuser.views.login',name='login'),
