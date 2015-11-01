@@ -29,7 +29,7 @@ def pushLoginMessageToGameSer(**kwargs):
             requests.get('http//%s:%s/clogin'%(url,port))
 
         except Exception,e:
-            print "Can not send message to Game Server"
+            print "Cannot send message to Game Server"
             response = HttpResponseRedirect("/admin")
             return response
 
