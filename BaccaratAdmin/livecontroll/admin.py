@@ -7,7 +7,7 @@ from BaccaratAdmin.tools.protobuff import login_pb2,tableLimit_pb2,bulletin_pb2
 import requests
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.db.models.signals import post_save
 from BaccaratAdmin.livecontroll.models import TBulletin,TTableLimitset,TPersonalLimitset,TRounds,TVideo,TTable
 from BaccaratAdmin.settings import GAME_SERVER
@@ -28,11 +28,8 @@ def pushLoginMessageToGameSer(**kwargs):
         try:
             requests.get('http//%s:%s/clogin'%(url,port))
 
-        except Exception:
+        except Exception,e:
             print "Can not send message to Game Server"
-            return False
-
-        finally:
             response = HttpResponseRedirect("/admin")
             return response
 
@@ -58,10 +55,9 @@ def pushBulletinToGameSer(sender,instance,**argvs):
         #mybulletin.text = instance.text
         try:
             requests.get('http://%s:%s/bulletin?command=%s'%(url,port,command))
-        except Exception:
+        except Exception, e:
             response = HttpResponseRedirect("/admin")
             return response
-        return True
 
 @admin.register(TTableLimitset)
 class TTableLimitsetAdmin(admin.ModelAdmin):
@@ -174,12 +170,10 @@ class TTableAdmin(admin.ModelAdmin):
             obj.save()
             obj.add_table()
 
-#@receiver(user_logged_in)
-def getVideoInfoFromGameSer(**kwargs):
-    command = 50002
-    try:
-        requests.get('%s:%s/video?command=%s'%(url,port,command))
-    except Exception:
-        response = HttpResponseRedirect("/admin")
-        return response
-    return True
+#def getVideoInfoFromGameSer(**kwargs):
+#    command = 50002
+#    try:
+#        requests.get('%s:%s/video?command=%s'%(url,port,command))
+#    except Exception, e:
+#        response = HttpResponseRedirect("/admin")
+#        return response
